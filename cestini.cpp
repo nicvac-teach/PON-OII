@@ -12,6 +12,8 @@ void solve(int t) {
     cin >> S;
 
     // Aggiungi codice se vuoi
+    vector<string> cestini(M);
+    cestini[0] = S;
 
     string risposta;
 
@@ -22,11 +24,12 @@ void solve(int t) {
 
         if (type == 's') {
             // Aggiungi codice...
+            cestini[b].push_back( cestini[a].back() );
+            cestini[a].pop_back();
 
         } else {
             // Aggiungi altro codice...
-
-            risposta.push_back('A');
+            risposta.push_back( cestini[a][b] );
         }
     }
 
@@ -38,8 +41,8 @@ int main() {
     // se preferisci leggere e scrivere da file
     // ti basta decommentare le seguenti due righe:
 
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    freopen("cestini_input_1.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
 
     int T;
     cin >> T;
