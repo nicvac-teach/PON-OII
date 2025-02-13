@@ -8,7 +8,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
-                "-std=c++17",
+                "-std=c++2a",
                 "-g",
                 "${file}",
                 "-o",
