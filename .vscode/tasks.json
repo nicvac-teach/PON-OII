@@ -8,6 +8,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
+                "-std=c++17",
                 "-g",
                 "${file}",
                 "-o",
@@ -37,6 +38,7 @@
                 "-I",             //nicvac
                 "${fileDirname}", //nicvac
                 "-fdiagnostics-color=always",
+                "-std=c++17",
                 "-g",
                 //"${file}",  //nicvac
                 "*.cpp",      //nicvac
