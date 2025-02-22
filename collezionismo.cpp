@@ -10,28 +10,6 @@
 
 using namespace std;
 
-//Calcola la discrepanza in una configurazione di mensola
-size_t discrepanzaTot( const vector<int>& C, const vector<pair<size_t, size_t> > & mensoleIdx ) {
-    int d = 0;
-    for ( int i=0; i<mensoleIdx.size(); ++i ) {
-        const auto & idx = mensoleIdx[i];
-        d += C[idx.second] - C[idx.first];
-    } 
-    return d;
-}
-
-//Trasformo la configurazione [1, 1, 4] in coppie di indici [(0,0) (1,1) (2,5)]
-void mensole2Idx( const vector<size_t>& mensole, vector<pair<size_t, size_t> > & mensoleIdx ) {
-    mensoleIdx.clear();
-    size_t k = 0;
-    for ( int i=0; i<mensole.size(); ++i ) {
-        const int & quanti = mensole[i];
-
-        mensoleIdx.push_back( make_pair(k, k+quanti-1) );
-        k += quanti;
-    }
-}
-
 
 void solve(int t) {
     int N, K;
@@ -43,59 +21,88 @@ void solve(int t) {
     }
 
     // aggiungi codice...
+
+    /* Intuizione chiave:
+    Se sapessimo che la risposta è X, potremmo verificare se è possibile ottenere una soluzione 
+    dove la somma delle discrepanze è ≤ X
+    Questo suggerisce che possiamo fare una ricerca binaria sulla risposta
+    Cioè: - se non trovo una combinazione, provo per X più grande
+          - se trovo la combinazione, provo per X più piccolo
+    Bisogna ricercare un valore di X in [0, max(C)-min(C)]
+    Cominciamo con un valore medio di X.
+
+    > Funzione di verifica per un dato X
+    - Tentiamo di costruire K gruppi dove ogni gruppo ha discrepanza ≤ X/K
+    - Scorriamo l'array ordinato:
+        - Iniziamo un nuovo gruppo con il primo elemento non assegnato
+        - Continuiamo ad aggiungere elementi finché:
+            - la discrepanza del gruppo corrente resta ≤ X/K
+            - quando supera X/K, iniziamo un nuovo gruppo
+    - Se riusciamo a formare ≤ K gruppi, X è possibile, altrimenti X non è possibile.
+
+    Esempio
+    [4, 42, 23, 0, 21, 2] con K=3
+
+    1. Ordiniamo: [0, 2, 4, 21, 23, 42]
+
+    2. Supponiamo X=6 (somma target delle discrepanze)
+    Quindi ogni gruppo può avere discrepanza ≤ 2 (X/K)
+
+    3. Tentiamo di formare gruppi:
+    Gruppo 1: [0, 2] (discr=2)
+    Gruppo 2: [4] (discr=0)
+    Gruppo 3: [21, 23] (discr=2)
+    Il 42 non può essere inserito in nessun gruppo senza superare la discrepanza 2 => X=6 non è possibile
+
+    4. Continuiamo la ricerca binaria con un X più grande
+
+    */
+
     //Ordino i valori per calcolare le discrepanze fra valori contigui
     sort(C.begin(), C.end());
 
-    //Calcolo tutti le possibili combinazioni per ogni scaffale
-    //Su 6 oggetti e 3 mensole, provo:
-    //1, 1, 4
-    //1, 2, 3
-    //1, 3, 2
-    //1, 4, 1
-    //2, 3, 1
-    //3, 2, 1
-    //4, 1, 1
-    //Tutti gli elementi a 1, l'ultimo a 4.
-    vector<size_t> mensole(K, 1);
-    mensole[K-1] = N-(K-1);
+    pair<int, int> rangeX( make_pair(0, C.back() - C.front()) );
+    pair<int, int> rangeX_prev = rangeX;
+    bool loop = false;
+    while ( rangeX.first < rangeX.second && not(loop) ) {
+        size_t X = (rangeX.first + rangeX.second) / 2;
 
-    //Trasformo la configurazione [1, 1, 4] in coppie di indici [(0,0) (1,1) (2,5)]
-    vector< pair<size_t, size_t> > mensoleIdx;
-    mensole2Idx( mensole, mensoleIdx );
+        size_t discrepanza = X/K;
 
-    size_t minDiscrTot = discrepanzaTot( C, mensoleIdx );
-
-    //Finchè non raggiungo la configurazione [4, 1, 1]
-    size_t top = mensole.back();
-    int k = mensole.size() - 1;
-    while ( mensole[0] != top ) {
-        //Calcolo la prossima configurazione di mensole
-        //[2, 3, 1] -> [3, 2, 1]
-        //Considero l'elemento più a destra possibile != 1 e lo sposto sulla mensola a sinistra
-        int i=-1;
-        while (k >= 0 && i<0) {
-            if (mensole[k] != 1) { 
-                i=k; 
-            } else {
-                --k;
+        vector<int> idx(1, 0);
+        int i = 1;
+        while ( i < C.size() && idx.size() < K ) {
+            int d = C[i] - C[ idx.back() ];
+            if (d > discrepanza ) {
+                idx.push_back(i);
             }
+            ++i;
         }
-        ++mensole[i-1];
-        --mensole[i];
-        mensole2Idx( mensole, mensoleIdx );
-        minDiscrTot = min( minDiscrTot, discrepanzaTot( C, mensoleIdx ));
+        --i;
+        //Se ho formato K gruppi o meno => X possibile
+        if ( i==C.size()-1 && idx.size() <= K) {
+            //X è possibile, provo per una X più piccola.
+            rangeX.second = X;
+        } else {
+            rangeX.first = X;
+        }
+
+        loop = (rangeX == rangeX_prev);
+        rangeX_prev = rangeX;
     }
+    cout << "Case #" << t << ": Loop: " << loop << "\n";
     
-    int risposta = minDiscrTot;
+    int risposta = rangeX.first;
 
     cout << "Case #" << t << ": " << risposta << "\n";
+    
 }
 
 int main() {
     // se preferisci leggere e scrivere da file
     // ti basta decommentare le seguenti due righe:
 
-    freopen("collezionismo_input_1.txt", "r", stdin);
+    freopen("collezionismo_input01.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
     int T;
