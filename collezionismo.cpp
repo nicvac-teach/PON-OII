@@ -97,6 +97,7 @@ void solve(int t) {
         if ( i==C.size() && idx.size() <= K) {
             //X è possibile, provo per X più piccole.
             //Se somma è più piccolo di X, considero somma.
+            //rangeX.second = X;
             rangeX.second = min(X, somma);
         } else {
             //X non è possibile, provo per X più grandi.
@@ -120,7 +121,7 @@ int main() {
     // ti basta decommentare le seguenti due righe:
 
     //freopen("collezionismo_input_1.txt", "r", stdin);
-    freopen("collezionismo_input_4.txt", "r", stdin);
+    freopen("collezionismo_input_5.txt", "r", stdin);
     //freopen("collezionismo_input01.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
