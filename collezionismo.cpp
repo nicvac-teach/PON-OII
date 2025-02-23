@@ -33,30 +33,49 @@ void solve(int t) {
     Cominciamo con un valore medio di X.
 
     > Funzione di verifica per un dato X
-    - Tentiamo di costruire K gruppi dove ogni gruppo ha discrepanza ≤ X/K
-    - Scorriamo l'array ordinato:
-        - Iniziamo un nuovo gruppo con il primo elemento non assegnato
-        - Continuiamo ad aggiungere elementi finché:
-            - la discrepanza del gruppo corrente resta ≤ X/K
-            - quando supera X/K, iniziamo un nuovo gruppo
-    - Se riusciamo a formare ≤ K gruppi, X è possibile, altrimenti X non è possibile.
+    - Per un dato X (somma totale target): Dobbiamo solo garantire che la SOMMA delle discrepanze sia ≤ X
+    - Provare a formare gruppi in modo greedy
+    - Tenere traccia della somma delle discrepanze
+    - Fermarsi se:
+        - La somma supera X (fallimento)
+        - Abbiamo usato più di K gruppi (fallimento)
+        - Abbiamo assegnato tutti gli elementi usando ≤ K gruppi (successo)
+
+    - Se riusciamo a formare ≤ K gruppi, SOMMA≤ X ==> X è possibile, altrimenti X non è possibile.
 
     Esempio
-    [4, 42, 23, 0, 21, 2] con K=3
+    Per l'array ordinato [0, 2, 4, 21, 23, 42] e K=3:
 
-    1. Ordiniamo: [0, 2, 4, 21, 23, 42]
+    - Provo a costruire gruppi in modo greedy:
+    * Ogni gruppo può avere qualsiasi discrepanza
+    * Mi fermo quando la somma delle discrepanze supera X
+    * Devo solo garantire di usare al massimo K gruppi
 
-    2. Supponiamo X=6 (somma target delle discrepanze)
-    Quindi ogni gruppo può avere discrepanza ≤ 2 (X/K)
+    Per X=6:
+    Gruppo 1: [0, 2, 4]     -> discr = 4
+    Gruppo 2: [21, 23]      -> discr = 2
+    Gruppo 3: [42]          -> discr = 0
+                            Tot = 6 ≤ X
+    
+    Prima iterazione
+    min_gruppo = 0
+    Provo ad aggiungere:
+    - 2: discr = 2, ok (somma = 2)
+    - 4: discr = 4, ok (somma = 4)
+    - 21: discr = 21, NO!
+    Prendo [0,2,4]
+        
+    Seconda iterazione
+    min_gruppo = 21
+    Provo ad aggiungere:
+    - 23: discr = 2, ok (somma = 6)
+    - 42: discr = 21, NO!
+    Prendo [21,23]
 
-    3. Tentiamo di formare gruppi:
-    Gruppo 1: [0, 2] (discr=2)
-    Gruppo 2: [4] (discr=0)
-    Gruppo 3: [21, 23] (discr=2)
-    Il 42 non può essere inserito in nessun gruppo senza superare la discrepanza 2 => X=6 non è possibile
-
-    4. Continuiamo la ricerca binaria con un X più grande
-
+    Terza iterazione
+    min_gruppo = 42
+    gruppo = [42]
+    discr = 0 (somma resta 6)
     */
 
     //Ordino i valori per calcolare le discrepanze fra valori contigui
@@ -79,22 +98,26 @@ void solve(int t) {
         int i = 1;
         size_t somma = 0;
         //Se idx supera K ==> X corrente non è possibile
-        while ( i < C.size() && idx.size() <= K ) {
+        //Se somma supera X ==> X corrente non è possibile
+        while ( i < C.size() && idx.size() <= K && somma <= X ) {
+            //discrepanza sulla mensola corrente
             size_t d = C[i] - C[ idx.back() ];
             if (somma + d > X  ) {
-                //L'elemento corrente fa crescere la discrepanza sulla mensola corrente
-                // ==> lo dispongo nella nuova mensola
+                //La discrepanza della mensola corrente fa crescere la discrepanza totale
+                // tale da superare X ==> dispongo l'elemento corrente sulla nuova mensola.
+                // Ho completato una mensola ==> aggiungo la sua discrepanza al totale.
                 somma += C[i-1] - C[idx.back()];
+                //Nella nuova mensola dispongo l'elemento i
                 idx.push_back(i);
-                
             }
             ++i;
         }
+        //Calcolo e sommo la Discrepanza dell'ultima mensola
         somma += C.back() - C[idx.back()];
         //Se ho analizzato tutti gli elementi e ho impiegato K mensole 
         // (cioè in idx ho K elementi) => è possibile disporre su K mensole 
         // con somma delle discrepanze pari a X, cioè X è possibile.
-        if ( i==C.size() && idx.size() <= K) {
+        if ( i==C.size() && idx.size() <= K && somma <= X ) {
             //X è possibile, provo per X più piccole.
             //Se somma è più piccolo di X, considero somma.
             //rangeX.second = X;
