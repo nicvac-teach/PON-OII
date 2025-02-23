@@ -140,6 +140,11 @@ void solve(int t) {
     
 }
 
+/*
+ATTENZIONE! SCORE 4/15!
+NON FUNZIONA PER TUTTI I TEST CASE
+*/
+
 int main() {
     // se preferisci leggere e scrivere da file
     // ti basta decommentare le seguenti due righe:
