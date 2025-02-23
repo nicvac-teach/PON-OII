@@ -145,6 +145,7 @@ ATTENZIONE! SCORE 4/15!
 NON FUNZIONA PER TUTTI I TEST CASE
 Soluzione da wiki oii:
 https://wiki.olinfo.it/2021/territoriali/collezionismo
+https://forum.olinfo.it/t/chiarimenti-per-il-codice-di-collezionismo/8201/4
 */
 
 int main() {
