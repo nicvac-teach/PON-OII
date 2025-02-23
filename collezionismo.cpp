@@ -11,6 +11,7 @@
 
 using namespace std;
 
+#define ull unsigned long long
 
 void solve(int t) {
     int N, K;
@@ -81,12 +82,12 @@ void solve(int t) {
     //Ordino i valori per calcolare le discrepanze fra valori contigui
     sort(C.begin(), C.end());
 
-    pair<int, int> rangeX( make_pair(0, C.back() - C.front()) );
-    pair<int, int> rangeX_prev = rangeX;
+    pair<ull, ull> rangeX( make_pair(0, C.back() - C.front()) );
+    pair<ull, ull> rangeX_prev = rangeX;
     bool loop = false;
     while ( rangeX.first <= rangeX.second && not(loop) ) {
         //size_t X = (size_t) round((rangeX.first + rangeX.second) / 2.0);
-        size_t X = (rangeX.first + rangeX.second) / 2;
+        ull X = (rangeX.first + rangeX.second) / 2;
 
         //La somma delle K discrepanze deve essere X ==> provo a mettere più elementi
         // possibili nel gruppo finchè resto in somma X
@@ -95,13 +96,13 @@ void solve(int t) {
         // se idx è [0,4,9]  ==> ho tre mensole. La prima mensola contiene da C[0] a c[3],
         // la seconda mensola contiene da C[4] a C[8], la terza da C[9] in poi
         vector<size_t> idx(1, 0);
-        int i = 1;
-        size_t somma = 0;
+        size_t i = 1;
+        ull somma = 0;
         //Se idx supera K ==> X corrente non è possibile
         //Se somma supera X ==> X corrente non è possibile
         while ( i < C.size() && idx.size() <= K && somma <= X ) {
             //discrepanza sulla mensola corrente
-            size_t d = C[i] - C[ idx.back() ];
+            ull d = C[i] - C[ idx.back() ];
             if (somma + d > X  ) {
                 //La discrepanza della mensola corrente fa crescere la discrepanza totale
                 // tale da superare X ==> dispongo l'elemento corrente sulla nuova mensola.
@@ -120,8 +121,8 @@ void solve(int t) {
         if ( i==C.size() && idx.size() <= K && somma <= X ) {
             //X è possibile, provo per X più piccole.
             //Se somma è più piccolo di X, considero somma.
-            //rangeX.second = X;
-            rangeX.second = min(X, somma);
+            rangeX.second = X;
+            //rangeX.second = min(X, somma);
         } else {
             //X non è possibile, provo per X più grandi.
             //rangeX.first = X+1;
@@ -144,8 +145,8 @@ int main() {
     // ti basta decommentare le seguenti due righe:
 
     //freopen("collezionismo_input_1.txt", "r", stdin);
-    freopen("collezionismo_input_6.txt", "r", stdin);
-    //freopen("collezionismo_input01.txt", "r", stdin);
+    //freopen("collezionismo_input_8.txt", "r", stdin);
+    freopen("collezionismo_input01.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
     int T;
