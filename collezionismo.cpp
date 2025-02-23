@@ -69,34 +69,35 @@ void solve(int t) {
         //size_t X = (size_t) round((rangeX.first + rangeX.second) / 2.0);
         size_t X = (rangeX.first + rangeX.second) / 2;
 
-        //Se la somma delle K discrepanze deve essere X ==> ogni mensola 
-        // deve avere al più una discrepanza pari a X/K.
-        //size_t discrepanza = (size_t)(round(X/(float)K));
-        //size_t discrepanza = X/K;
-        float discrepanza = X/(float)K;
-        //float discrepanza = ceil(X/(float)K); //No, altrimenti in caso 1 X=3 diventa come X=4.
+        //La somma delle K discrepanze deve essere X ==> provo a mettere più elementi
+        // possibili nel gruppo finchè resto in somma X
 
         //Ogni elemento di idx corrisponde a una mensola
         // se idx è [0,4,9]  ==> ho tre mensole. La prima mensola contiene da C[0] a c[3],
         // la seconda mensola contiene da C[4] a C[8], la terza da C[9] in poi
-        vector<int> idx(1, 0);
+        vector<size_t> idx(1, 0);
         int i = 1;
+        size_t somma = 0;
         //Se idx supera K ==> X corrente non è possibile
         while ( i < C.size() && idx.size() <= K ) {
-            float d = C[i] - C[ idx.back() ];
-            if (d > discrepanza ) {
+            size_t d = C[i] - C[ idx.back() ];
+            if (somma + d > X  ) {
                 //L'elemento corrente fa crescere la discrepanza sulla mensola corrente
                 // ==> lo dispongo nella nuova mensola
+                somma += C[i-1] - C[idx.back()];
                 idx.push_back(i);
+                
             }
             ++i;
         }
+        somma += C.back() - C[idx.back()];
         //Se ho analizzato tutti gli elementi e ho impiegato K mensole 
         // (cioè in idx ho K elementi) => è possibile disporre su K mensole 
         // con somma delle discrepanze pari a X, cioè X è possibile.
         if ( i==C.size() && idx.size() <= K) {
             //X è possibile, provo per X più piccole.
-            rangeX.second = X;
+            //Se somma è più piccolo di X, considero somma.
+            rangeX.second = min(X, somma);
         } else {
             //X non è possibile, provo per X più grandi.
             //rangeX.first = X+1;
@@ -118,7 +119,9 @@ int main() {
     // se preferisci leggere e scrivere da file
     // ti basta decommentare le seguenti due righe:
 
-    freopen("collezionismo_input01.txt", "r", stdin);
+    //freopen("collezionismo_input_1.txt", "r", stdin);
+    freopen("collezionismo_input_4.txt", "r", stdin);
+    //freopen("collezionismo_input01.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
     int T;
