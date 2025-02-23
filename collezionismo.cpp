@@ -7,6 +7,7 @@
 #include <set>
 #include <utility>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -65,34 +66,46 @@ void solve(int t) {
     pair<int, int> rangeX_prev = rangeX;
     bool loop = false;
     while ( rangeX.first < rangeX.second && not(loop) ) {
+        //size_t X = (size_t) round((rangeX.first + rangeX.second) / 2.0);
         size_t X = (rangeX.first + rangeX.second) / 2;
 
+        //Se la somma delle K discrepanze deve essere X ==> ogni mensola 
+        // deve avere al più una discrepanza pari a X/K.
+        //size_t discrepanza = (size_t)(round(X/(float)K));
         size_t discrepanza = X/K;
 
+        //Ogni elemento di idx corrisponde a una mensola
+        // se idx è [0,4,9]  ==> ho tre mensole. La prima mensola contiene da C[0] a c[3],
+        // la seconda mensola contiene da C[4] a C[8], la terza da C[9] in poi
         vector<int> idx(1, 0);
         int i = 1;
-        while ( i < C.size() && idx.size() < K ) {
+        //Se idx supera K ==> X corrente non è possibile
+        while ( i < C.size() && idx.size() <= K ) {
             int d = C[i] - C[ idx.back() ];
             if (d > discrepanza ) {
+                //L'elemento corrente fa crescere la discrepanza sulla mensola corrente
+                // ==> lo dispongo nella nuova mensola
                 idx.push_back(i);
             }
             ++i;
         }
-        --i;
-        //Se ho formato K gruppi o meno => X possibile
-        if ( i==C.size()-1 && idx.size() <= K) {
-            //X è possibile, provo per una X più piccola.
+        //Se ho analizzato tutti gli elementi e ho impiegato K mensole 
+        // (cioè in idx ho K elementi) => è possibile disporre su K mensole 
+        // con somma delle discrepanze pari a X, cioè X è possibile.
+        if ( i==C.size() && idx.size() <= K) {
+            //X è possibile, provo per una X più piccole.
             rangeX.second = X;
         } else {
+            //X non è possibile, provo per una X più grandi.
             rangeX.first = X;
         }
 
         loop = (rangeX == rangeX_prev);
         rangeX_prev = rangeX;
     }
-    cout << "Case #" << t << ": Loop: " << loop << "\n";
     
-    int risposta = rangeX.first;
+    //Il limite superiore contiene le X possibili
+    int risposta = rangeX.second;
 
     cout << "Case #" << t << ": " << risposta << "\n";
     
