@@ -84,7 +84,7 @@ void solve(int t) {
     pair<int, int> rangeX( make_pair(0, C.back() - C.front()) );
     pair<int, int> rangeX_prev = rangeX;
     bool loop = false;
-    while ( rangeX.first < rangeX.second && not(loop) ) {
+    while ( rangeX.first <= rangeX.second && not(loop) ) {
         //size_t X = (size_t) round((rangeX.first + rangeX.second) / 2.0);
         size_t X = (rangeX.first + rangeX.second) / 2;
 
@@ -144,7 +144,7 @@ int main() {
     // ti basta decommentare le seguenti due righe:
 
     //freopen("collezionismo_input_1.txt", "r", stdin);
-    freopen("collezionismo_input_5.txt", "r", stdin);
+    freopen("collezionismo_input_6.txt", "r", stdin);
     //freopen("collezionismo_input01.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
