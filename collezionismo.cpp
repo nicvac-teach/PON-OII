@@ -72,7 +72,9 @@ void solve(int t) {
         //Se la somma delle K discrepanze deve essere X ==> ogni mensola 
         // deve avere al più una discrepanza pari a X/K.
         //size_t discrepanza = (size_t)(round(X/(float)K));
-        size_t discrepanza = X/K;
+        //size_t discrepanza = X/K;
+        float discrepanza = X/(float)K;
+        //float discrepanza = ceil(X/(float)K); //No, altrimenti in caso 1 X=3 diventa come X=4.
 
         //Ogni elemento di idx corrisponde a una mensola
         // se idx è [0,4,9]  ==> ho tre mensole. La prima mensola contiene da C[0] a c[3],
@@ -81,7 +83,7 @@ void solve(int t) {
         int i = 1;
         //Se idx supera K ==> X corrente non è possibile
         while ( i < C.size() && idx.size() <= K ) {
-            int d = C[i] - C[ idx.back() ];
+            float d = C[i] - C[ idx.back() ];
             if (d > discrepanza ) {
                 //L'elemento corrente fa crescere la discrepanza sulla mensola corrente
                 // ==> lo dispongo nella nuova mensola
@@ -93,10 +95,11 @@ void solve(int t) {
         // (cioè in idx ho K elementi) => è possibile disporre su K mensole 
         // con somma delle discrepanze pari a X, cioè X è possibile.
         if ( i==C.size() && idx.size() <= K) {
-            //X è possibile, provo per una X più piccole.
+            //X è possibile, provo per X più piccole.
             rangeX.second = X;
         } else {
-            //X non è possibile, provo per una X più grandi.
+            //X non è possibile, provo per X più grandi.
+            //rangeX.first = X+1;
             rangeX.first = X;
         }
 
