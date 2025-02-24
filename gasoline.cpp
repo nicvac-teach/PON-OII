@@ -18,8 +18,8 @@ int G[MAXN];
 
 int main() {
   //  uncomment the following lines if you want to read/write from files
-  freopen("gasoline_input0.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
+  //freopen("gasoline_input0.txt", "r", stdin);
+  //freopen("output.txt", "w", stdout);
 
   assert(1 == scanf("%d", &N));
   for (i = 0; i < N; i++) assert(1 == scanf("%d", &P[i]));
@@ -34,20 +34,14 @@ int main() {
   10 ==> 2, successivo 10 >= 10 ==> +4, stop
   */
 
-  size_t pay=0;
+  long long pay=0;
   size_t currStation = P[0];
-  pay = currStation*G[0];
-  int i=1;
-  while (i<N) {
-    if ( P[i] >= currStation ) {
-      pay += currStation * G[i];
-    } else {
+  for (int i=0; i<N; ++i) {
+    if ( P[i] < currStation ) {
       currStation = P[i];
-      pay += currStation * G[i];
     }
-    ++i;
+    pay += currStation * G[i];
   }
-  
 
   printf("%lld\n", pay);  // print the result
   return 0;
