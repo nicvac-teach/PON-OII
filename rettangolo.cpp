@@ -1,3 +1,5 @@
+//https://territoriali.olinfo.it/task/rettangolo
+
 #include <iostream>
 #include <string>
 #include <vector>
