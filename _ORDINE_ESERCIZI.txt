@@ -1,0 +1,20 @@
+ls -1atr *.pdf
+
+caramelle.pdf
+cestini.pdf
+pesci.pdf
+basket.pdf
+antivirus.pdf
+download.pdf
+fossili.pdf
+fortuna.pdf
+collezionismo.pdf
+fieno.pdf
+fib_monologo.pdf
+soldatini.pdf
+scommessa.pdf
+gasoline.pdf
+rettangolo.pdf
+xray.pdf
+cioccolato.pdf
+...
