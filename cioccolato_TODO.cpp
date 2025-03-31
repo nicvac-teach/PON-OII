@@ -4,13 +4,16 @@
 #include <vector>
 using namespace std;
 
+//Idea principale: ridurre la tavoletta ad un quadrato.
+//Quando arrivo ad un quadrato, se servo sue amici torno sempre a un quadrato.
 void solve(int t){
 
     long long N, M, K;
     cin >> N >> M >> K;
 
     long long risposta = 0;
-    // aggiungi codice..
+
+    //Vedi soluzione su classroom
 
     cout << "Case #" << t << ": " << risposta << "\n";
 }
