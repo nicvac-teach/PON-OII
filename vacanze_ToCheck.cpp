@@ -12,11 +12,16 @@ using namespace std;
 
 void solve(int t) {
 
-    //Matrice di adiacenza
-    vector< vector<int> > g(1500, vector<int>(1500, 0));
 
     int N, M;
     cin >> N >> M;
+
+    //Matrice di adiacenza
+    vector< vector<int> > g(N, vector<int>(N, 0));
+
+    //Metto da parte gli archi per ottimizzare la soluzione.
+    //vector<pair<int,int>> archi(M);
+    vector<pair<int,int>> archi;
 
     int a,b;
     for (int i = 0; i < M; i++) {
@@ -24,6 +29,7 @@ void solve(int t) {
 
         g[a][b] = 1;
         g[b][a] = 1;    
+        archi.push_back(make_pair(a,b));
     }
 
     // aggiungi codice...
@@ -31,6 +37,7 @@ void solve(int t) {
 
     //Quattro amici (nodi), dove ogni nodo è amico di due, ma non amico dell'altro
     
+    /*/
     //Metodo inefficiente, complessità n^4:
     //Provo tutte le quadruple e controllo le amicizie
     //Variabili che identificano un gruppo di amici
@@ -51,9 +58,36 @@ void solve(int t) {
             }
         }
     }
+    //*/
+    //Versione efficiente: penso agli archi invece che ai nodi
+    int x,y,w,z;
+    
+    for (int i=0; i<M-1; ++i) {
+        //x e y sono amici
+        x = archi[i].first;
+        y = archi[i].second;
+        for (int j=i+1; i<M; ++j) {
+            //w e z sono amici
+            // quindiu tutti nel gruppo hanno già un amico
+            w = archi[j].first;
+            z = archi[j].second;
+            //Se tutte e quattro sono persone diverse
+            if ( !(x==w || x==z) && !(y==w || y==z) ) {
+                if ( g[x][w] && g[y][z] && !g[x][z] && !g[y][w]) {
+                    ++risposta;
+                } else {
+                    if ( !g[x][w] && !g[y][z] && g[x][z] && g[y][w] ) {
+                        ++risposta;
+                    }
+                }
+            }
+        }
+    }
+    //*/
 
-    //TODO: Fare la versione efficiente
-    risposta = 0;
+    //In entrambe le soluzioni le risposte vengono contate due volte
+    risposta /= 2;
+    
     cout << "Case #" << t << ": " << risposta << "\n";
 }
 
