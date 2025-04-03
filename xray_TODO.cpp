@@ -1,4 +1,5 @@
 //https://territoriali.olinfo.it/task/xray
+//Soluzione su classroom
 
 #include <iostream>
 #include <string>
@@ -15,8 +16,14 @@ void solve(int t) {
         cin >> V[i];
     }
 
-    // aggiungi codice...
-    int risposta = 42;
+    int risposta = 0;
+
+    //Mentre il vettore ha elementi > 0
+        //Trovo intervalli consecutivi in cui non ci sono zeri...
+
+        //Per ogni intervallo
+            //Decremento di uno tutti i valori nell'intervallo
+            //Incremento il numero di scansioni
 
     cout << "Case #" << t << ": " << risposta << "\n";
 }

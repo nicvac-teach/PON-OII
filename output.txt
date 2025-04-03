@@ -1,4 +1,19 @@
-DFS da nodo 0
-0 5 4 1 2 3 
-BFS da nodo 0
-0 1 5 2 4 3 
+Case #1: 42
+Case #2: 42
+Case #3: 42
+Case #4: 42
+Case #5: 42
+Case #6: 42
+Case #7: 42
+Case #8: 42
+Case #9: 42
+Case #10: 42
+Case #11: 42
+Case #12: 42
+Case #13: 42
+Case #14: 42
+Case #15: 42
+Case #16: 42
+Case #17: 42
+Case #18: 42
+Case #19: 42
