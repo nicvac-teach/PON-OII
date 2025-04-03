@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-    ifstream cin("#lezione_grafo_input.txt");
+    ifstream cin("#01_lezione_grafo_input.txt");
     ofstream cout("output.txt");
 
     //Matrice di adiacenza
