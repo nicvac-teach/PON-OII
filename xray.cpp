@@ -45,6 +45,9 @@ void solve(int t) {
 
         //Trovo intervalli consecutivi in cui non ci sono zeri...
         vector< pair<int,int> > ranges;
+
+        //@@@ Ottimizzazione possibile: anzichè partire da V.begin(), puoi
+        // ripartire dallo start del primo intervallo accodato nel ciclo precedente.
         vector<int>::iterator start = V.begin();
         while ( start != V.end() ) {
             
@@ -76,6 +79,8 @@ void solve(int t) {
         vector< pair<int,int> >::iterator rangeIt;
         for (rangeIt = ranges.begin(); rangeIt!=ranges.end(); ++rangeIt) {
             //Decremento di uno tutti i valori nell'intervallo
+            //@@@ Ottimizzazione possibile: decrementare del minimo valore nell'intervallo
+            // e incrementare risposta di questo minimo.
             int startIdx = (*rangeIt).first;
             int stopIdx  = (*rangeIt).second;
             for (int i=startIdx; i<=stopIdx; ++i) {
